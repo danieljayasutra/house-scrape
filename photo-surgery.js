@@ -2,7 +2,7 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
-const { downloadImage } = require('./download');
+const { downloadImage, modifyFilename } = require('./download');
 const url = require('url');
 
 async function main() {
@@ -49,4 +49,16 @@ async function main2() {
     console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');
   }
 }
-main2();
+async function main3(params) {
+  try {
+    const imgSrc =
+      'https://scontent-cgk2-1.xx.fbcdn.net/v/t39.30808-6/470666086_577234665254805_2483254981865708034_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=aa7b47&_nc_ohc=_4la4xaFb-8Q7kNvgG5AC7U&_nc_zt=23&_nc_ht=scontent-cgk2-1.xx&_nc_gid=AKdO24TTDE_O_YJzUvoL7h0&oh=00_AYAEL-WWcE_hXVCFoKVCGVVRU_pQiBsaZNrwPm2_9b07ig&oe=676FFF29';
+    const imageName = path.basename(url.parse(imgSrc).pathname);
+    console.log(modifyFilename(imageName));
+    const imagePath = path.join(__dirname + '/img', imageName);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+main3();

@@ -30,6 +30,29 @@ async function downloadImage(url, path) {
   }
 }
 
+// Fungsi untuk memodifikasi string
+function modifyFilename(filename) {
+  // Periksa apakah filename adalah string
+  if (typeof filename !== 'string') {
+    console.error('Input harus berupa string.');
+    return null;
+  }
+
+  // Pecah string berdasarkan underscore (_)
+  const parts = filename.split('_');
+
+  // Ambil bagian pertama
+  const baseName = parts[0];
+
+  // Ambil ekstensi asli dari filename
+  const extension = filename.substring(filename.lastIndexOf('.'));
+
+  // Gabungkan baseName dengan ekstensi asli
+  const newFilename = baseName + extension;
+
+  return newFilename;
+}
 module.exports = {
   downloadImage,
+  modifyFilename,
 };

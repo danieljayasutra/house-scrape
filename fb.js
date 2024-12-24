@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 const url = require('url');
-const { downloadImage } = require('./download');
+const { downloadImage, modifyFilename } = require('./download');
+const { timeout } = require('puppeteer');
 
 // Fungsi untuk menunggu dengan delay random
 const randomDelay = (min, max) => {
@@ -15,11 +16,44 @@ const randomDelay = (min, max) => {
 // Fungsi untuk scroll
 
 const scrollPage = async (page, browser) => {
-  let previousHeight = await page.evaluate('document.body.scrollHeight');
+  // let previousHeight = await page.evaluate('document.body.scrollHeight');
   let lastDocLength = 0;
   while (true) {
     await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+    // Ambil nilai document.body.scrollHeight
+    const scrollHeight = await page.evaluate(() => {
+      return document.body.scrollHeight;
+    });
+
+    await randomDelay(900, 1200); // Delay random antara 3-7 detik
+
+    console.log(scrollHeight);
+    if (scrollHeight > 60000) {
+      const html = await page.evaluate(() => document.body.innerHTML);
+
+      const dom = new JSDOM(html);
+
+      const document = dom.window.document;
+
+      // Mencari tag <a> yang sesuai kriteria
+      const links = [...document.querySelectorAll('a')].filter(
+        (a) => a.href.includes('/photo/') && a.href.includes('set=g') && a.querySelector('img'),
+      );
+
+      // Mengambil nilai href
+      const hrefs = links.map((a) => a.href);
+      lastDocLength = hrefs.length;
+      console.log('Last doc length: ', lastDocLength);
+      break;
+    }
+  }
+  while (true) {
+    await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
     const html = await page.evaluate(() => document.body.innerHTML);
+    const scrollHeight = await page.evaluate(() => {
+      return document.body.scrollHeight;
+    });
+    console.log('Height: ', scrollHeight);
 
     const dom = new JSDOM(html);
 
@@ -37,6 +71,7 @@ const scrollPage = async (page, browser) => {
       const imagePage = await browser.newPage();
       await imagePage.goto('https://www.facebook.com' + newLink, {
         waitUntil: 'networkidle2',
+        timeout: 100000,
       });
       const htmlNewPage = await imagePage.evaluate(() => document.body.innerHTML);
       const imageDom = new JSDOM(htmlNewPage);
@@ -47,13 +82,16 @@ const scrollPage = async (page, browser) => {
       if (imgElement) {
         const imgSrc = imgElement.src;
         const imageName = path.basename(url.parse(imgSrc).pathname);
-        const imagePath = path.join(__dirname + '/img', imageName);
+        const imageNameModified = modifyFilename(imageName);
+        const imagePath = path.join(__dirname + '/img', imageNameModified);
 
         await downloadImage(imgSrc, imagePath);
       } else {
         console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');
       }
+      await randomDelay(1000, 3000); // Delay random antara 3-7 detik
       await imagePage.close();
+      await randomDelay(1000, 3000); // Delay random antara 3-7 detik
     }
 
     lastDocLength = hrefs.length;
@@ -63,14 +101,7 @@ const scrollPage = async (page, browser) => {
     const jsonData = JSON.stringify(hrefs, null, 2); // null dan 2 untuk menambah indentation (format yang rapi)
     fs.writeFileSync('document-link.json', jsonData);
 
-    await randomDelay(30000, 70000); // Delay random antara 3-7 detik
-
-    let newHeight = await page.evaluate('document.body.scrollHeight');
-    if (newHeight === previousHeight) {
-      console.log('End of page reached or no new content.');
-      break;
-    }
-    previousHeight = newHeight;
+    await randomDelay(3000, 7000); // Delay random antara 3-7 detik
   }
 };
 
@@ -79,7 +110,7 @@ async function main() {
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: false, // set ke true jika tidak perlu melihat browser
+    headless: true, // set ke true jika tidak perlu melihat browser
     defaultViewport: {
       width: 1280, // Lebar jendela
       height: 800, // Tinggi jendela
@@ -90,6 +121,7 @@ async function main() {
   // Buka halaman Facebook
   await page.goto('https://www.facebook.com/groups/367871819091010/media', {
     waitUntil: 'networkidle2',
+    timeout: 100000,
   });
   //   const html = await page.evaluate(() => document.body.innerHTML);
 
