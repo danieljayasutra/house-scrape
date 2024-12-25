@@ -28,7 +28,7 @@ const scrollPage = async (page, browser) => {
     await randomDelay(900, 1200); // Delay random antara 3-7 detik
 
     console.log(scrollHeight);
-    if (scrollHeight > 230000) {
+    if (scrollHeight > 200000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -80,15 +80,16 @@ const scrollPage = async (page, browser) => {
       const imgElement = document.querySelector('img[data-visualcompletion="media-vc-image"]');
 
       if (imgElement) {
-        const imgSrc = imgElement.src;
-        const imageName = path.basename(url.parse(imgSrc).pathname);
-        const imageNameModified = modifyFilename(imageName);
-        const imagePath = path.join(__dirname + '/img', imageNameModified);
-
-        await downloadImage(imgSrc, imagePath);
+        // const imgSrc = imgElement.src;
+        // const imageName = path.basename(url.parse(imgSrc).pathname);
+        // const imageNameModified = modifyFilename(imageName);
+        // const imagePath = path.join(__dirname + '/img', imageNameModified);
+        // await downloadImage(imgSrc, imagePath);
       } else {
-        const html = await imagePage.evaluate(() => document.body.innerHTML);
+        const html = await htmlNewPage.evaluate(() => document.body.innerHTML);
+
         fs.writeFileSync(`doc-photo-no-image-${Date.now()}.html`, html);
+
         console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');
       }
       await randomDelay(1000, 3000); // Delay random antara 3-7 detik
@@ -101,7 +102,7 @@ const scrollPage = async (page, browser) => {
     // fs.writeFileSync(`document-link.json`, links);
     // Mengonversi array menjadi string JSON
     const jsonData = JSON.stringify(hrefs, null, 2); // null dan 2 untuk menambah indentation (format yang rapi)
-    fs.writeFileSync('document-link.json', jsonData);
+    fs.writeFileSync(`document-link.json`, jsonData);
 
     await randomDelay(3000, 7000); // Delay random antara 3-7 detik
   }
