@@ -28,7 +28,7 @@ const scrollPage = async (page, browser) => {
     await randomDelay(900, 1200); // Delay random antara 3-7 detik
 
     console.log(scrollHeight);
-    if (scrollHeight > 230000) {
+    if (scrollHeight > 1000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -86,6 +86,8 @@ const scrollPage = async (page, browser) => {
         const imagePath = path.join(__dirname + '/img', imageNameModified);
 
         await downloadImage(imgSrc, imagePath);
+        console.log('breaking');
+        break;
       } else {
         const html = await imagePage.evaluate(() => document.body.innerHTML);
         fs.writeFileSync(`doc-photo-no-image-${Date.now()}.html`, html);
@@ -112,7 +114,7 @@ async function main() {
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: true, // set ke true jika tidak perlu melihat browser
+    headless: false, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     defaultViewport: {
       width: 1280, // Lebar jendela
