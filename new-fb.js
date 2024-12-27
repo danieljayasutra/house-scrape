@@ -25,13 +25,13 @@ async function main() {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
-  await infiteScroll(page, browser);
+  await infiniteScroll(page, browser);
   // Tutup browser
   await browser.close();
 }
 main();
 
-async function infiteScroll(page) {
+async function infiniteScroll(page) {
   let lastDocLength = 0;
   while (true) {
     await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
@@ -43,7 +43,7 @@ async function infiteScroll(page) {
 
     await randomDelay(1000, 3000); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 240000) {
+    if (scrollHeight > 355000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
