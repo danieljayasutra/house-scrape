@@ -41,9 +41,9 @@ async function infiniteScroll(page) {
     });
     console.log('Scrolling... ', scrollHeight);
 
-    await randomDelay(500, 2000); // Delay random antara 3-7 detik
+    await randomDelay(300, 1200); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 620000) {
+    if (scrollHeight > 650000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -65,7 +65,7 @@ async function infiniteScroll(page) {
 
   while (true) {
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await randomDelay(500, 2500);
+    await randomDelay(300, 12000);
 
     // Ambil isi DOM dan scroll height untuk validasi
     const html = await page.evaluate(() => document.body.innerHTML);
@@ -87,7 +87,7 @@ async function infiniteScroll(page) {
       await page.evaluate(findAndClickLink, newLink);
 
       // Tunggu beberapa saat sebelum melanjutkan
-      await randomDelay(500, 2500);
+      await randomDelay(300, 1200);
 
       // Cari elemen gambar
       const imageElement = await page.$('img[data-visualcompletion="media-vc-image"]');
@@ -106,16 +106,16 @@ async function infiniteScroll(page) {
         console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');
       }
 
-      await randomDelay(500, 2500);
+      await randomDelay(300, 1200);
 
       // Tunggu elemen dengan atribut spesifik muncul
       const selector = 'div[aria-label="Close"][role="button"]';
-      await page.waitForSelector(selector);
+      await page.waitForSelector(selector, { timeout: 60000 });
 
       // Klik elemen
       await page.click(selector);
 
-      await randomDelay(500, 2500);
+      // await randomDelay(300, 1200);
     }
 
     lastDocLength = hrefs.length;
