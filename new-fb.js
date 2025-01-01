@@ -41,9 +41,9 @@ async function infiniteScroll(page) {
     });
     console.log('Scrolling... ', scrollHeight);
 
-    await randomDelay(300, 1200); // Delay random antara 3-7 detik
+    await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 650000) {
+    if (scrollHeight > 700000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
