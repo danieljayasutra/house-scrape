@@ -12,7 +12,7 @@ async function main() {
   // Luncurkan browser
   const browser = await puppeteer.launch({
     headless: true, // set ke true jika tidak perlu melihat browser
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
       height: 800, // Tinggi jendela
@@ -22,6 +22,10 @@ async function main() {
   await browser.setCookie(...cookies);
   // Buka halaman Facebook
   // Jual Beli Rumah Murah kab. bandung selatan
+  // https://www.facebook.com/groups/1776631015998749/media
+
+  // Jual Beli Rumah Depok
+  // https://www.facebook.com/groups/122109641854754/media
   await page.goto('https://www.facebook.com/groups/1776631015998749/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
@@ -44,7 +48,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 200000) {
+    if (scrollHeight > 140178) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
