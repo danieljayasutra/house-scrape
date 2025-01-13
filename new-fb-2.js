@@ -26,7 +26,10 @@ async function main() {
 
   // Jual Beli Rumah Depok
   // https://www.facebook.com/groups/122109641854754/media
-  await page.goto('https://www.facebook.com/groups/1776631015998749/media', {
+
+  // JUAL BELI RUMAH JAKARTA UTARA
+  // https://www.facebook.com/groups/979076889513010/media
+  await page.goto('https://www.facebook.com/groups/979076889513010/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -48,7 +51,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 140178) {
+    if (scrollHeight > 120000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);

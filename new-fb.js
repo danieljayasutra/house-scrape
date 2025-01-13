@@ -25,7 +25,7 @@ async function main() {
 
   //JUAL BELI RUMAH SEMARANG
   //https://www.facebook.com/groups/1575993832691842/media
-  await page.goto('https://www.facebook.com/groups/1575993832691842/media', {
+  await page.goto('https://www.facebook.com/groups/367871819091010/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -47,7 +47,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 160000) {
+    if (scrollHeight > 50000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
