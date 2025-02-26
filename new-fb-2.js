@@ -4,14 +4,14 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 const url = require('url');
 const { downloadImage, modifyFilename } = require('./download');
-const { randomDelay } = require('./utils');
+const { randomDelay, fileExists } = require('./utils');
 
 async function main() {
   const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-2.json');
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: true, // set ke true jika tidak perlu melihat browser
+    headless: false, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
@@ -29,7 +29,10 @@ async function main() {
 
   // JUAL BELI RUMAH JAKARTA UTARA
   // https://www.facebook.com/groups/979076889513010/media
-  await page.goto('https://www.facebook.com/groups/979076889513010/media', {
+
+  // JUAL BELI RUMAH DI JAKARTA
+  // https://www.facebook.com/groups/292365461202093/media
+  await page.goto('https://www.facebook.com/groups/292365461202093/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -51,7 +54,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 120000) {
+    if (scrollHeight > 1) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -108,7 +111,11 @@ async function infiniteScroll(page) {
         const imageNameModified = modifyFilename(imageName);
         const imagePath = path.join(__dirname + '/img', imageNameModified);
 
-        await downloadImage(imgSrc, imagePath);
+        if (fileExists(imagePath)) {
+          console.log('File sudah ada: ' + imagePath);
+        } else {
+          await downloadImage(imgSrc, imagePath);
+        }
       } else {
         fs.writeFileSync(`new-doc-photo-no-image-2.html`, html);
         console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');

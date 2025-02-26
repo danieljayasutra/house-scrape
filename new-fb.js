@@ -4,14 +4,14 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 const url = require('url');
 const { downloadImage, modifyFilename } = require('./download');
-const { randomDelay } = require('./utils');
+const { randomDelay, fileExists } = require('./utils');
 
 async function main() {
   const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome.json');
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: true, // set ke true jika tidak perlu melihat browser
+    headless: false, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
@@ -20,11 +20,15 @@ async function main() {
   });
   const page = await browser.newPage();
   await browser.setCookie(...cookies);
-  // INFO jual beli rumah murah jabodetabek
-  //https://www.facebook.com/groups/367871819091010/media
+  // Buka halaman Facebook
+  // Jual Beli Rumah Murah kab. bandung selatan
+  // https://www.facebook.com/groups/1776631015998749/media
 
-  //JUAL BELI RUMAH SEMARANG
-  //https://www.facebook.com/groups/1575993832691842/media
+  // Jual Beli Rumah Depok
+  // https://www.facebook.com/groups/122109641854754/media
+
+  // JUAL BELI RUMAH JAKARTA UTARA
+  // https://www.facebook.com/groups/979076889513010/media
   await page.goto('https://www.facebook.com/groups/367871819091010/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
@@ -47,7 +51,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 50000) {
+    if (scrollHeight > 1) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -104,7 +108,11 @@ async function infiniteScroll(page) {
         const imageNameModified = modifyFilename(imageName);
         const imagePath = path.join(__dirname + '/img', imageNameModified);
 
-        await downloadImage(imgSrc, imagePath);
+        if (fileExists(imagePath)) {
+          console.log('File sudah ada: ' + imagePath);
+        } else {
+          await downloadImage(imgSrc, imagePath);
+        }
       } else {
         fs.writeFileSync(`new-doc-photo-no-image.html`, html);
         console.log('Gambar dengan atribut data-visualcompletion="media-vc-image" tidak ditemukan');
