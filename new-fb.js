@@ -11,7 +11,7 @@ async function main() {
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: false, // set ke true jika tidak perlu melihat browser
+    headless: true, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
