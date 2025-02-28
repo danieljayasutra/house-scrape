@@ -29,7 +29,7 @@ async function main() {
 
   // JUAL BELI RUMAH DI JAKARTA
   // https://www.facebook.com/groups/292365461202093/media
-  await page.goto('https://www.facebook.com/groups/292365461202093/media', {
+  await page.goto('https://www.facebook.com/groups/979076889513010/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
