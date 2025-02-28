@@ -21,11 +21,11 @@ async function main() {
   const page = await browser.newPage();
   await browser.setCookie(...cookies);
   // Buka halaman Facebook
-  // Jual Beli Rumah Murah kab. bandung selatan
-  // https://www.facebook.com/groups/1776631015998749/media
+  // JUAL BELI RUMAH DI BANDUNG
+  // https://www.facebook.com/groups/744229732320159/media
 
-  // Jual Beli Rumah Depok
-  // https://www.facebook.com/groups/122109641854754/media
+  // Rumah Murah surabaya
+  // https://www.facebook.com/groups/947230525862360/media
 
   // JUAL BELI RUMAH JAKARTA UTARA
   // https://www.facebook.com/groups/979076889513010/media

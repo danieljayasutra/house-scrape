@@ -24,9 +24,6 @@ async function main() {
   // Jual Beli Rumah Murah kab. bandung selatan
   // https://www.facebook.com/groups/1776631015998749/media
 
-  // Jual Beli Rumah Depok
-  // https://www.facebook.com/groups/122109641854754/media
-
   // JUAL BELI RUMAH JAKARTA UTARA
   // https://www.facebook.com/groups/979076889513010/media
 
