@@ -7,7 +7,7 @@ const { downloadImage, modifyFilename } = require('./download');
 const { randomDelay, fileExists } = require('./utils');
 
 async function main() {
-  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome.json');
+  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-3.json');
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
@@ -27,8 +27,9 @@ async function main() {
   // Rumah Murah surabaya
   // https://www.facebook.com/groups/947230525862360/media
 
-  // JUAL BELI RUMAH JAKARTA UTARA
-  // https://www.facebook.com/groups/979076889513010/media
+  // Info Jual Beli Rumah Tangerang
+  // https://www.facebook.com/groups/620497875014026/media
+
   await page.goto('https://www.facebook.com/groups/947230525862360/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,

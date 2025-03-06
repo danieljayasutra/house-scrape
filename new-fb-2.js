@@ -7,7 +7,7 @@ const { downloadImage, modifyFilename } = require('./download');
 const { randomDelay, fileExists } = require('./utils');
 
 async function main() {
-  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-2.json');
+  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-4.json');
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
