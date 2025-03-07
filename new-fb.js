@@ -7,11 +7,11 @@ const { downloadImage, modifyFilename } = require('./download');
 const { randomDelay, fileExists } = require('./utils');
 
 async function main() {
-  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-3.json');
+  const cookiesPath = path.resolve(__dirname, 'cookies-fb-chrome-1.json');
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: true, // set ke true jika tidak perlu melihat browser
+    headless: false, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
@@ -30,7 +30,7 @@ async function main() {
   // Info Jual Beli Rumah Tangerang
   // https://www.facebook.com/groups/620497875014026/media
 
-  await page.goto('https://www.facebook.com/groups/947230525862360/media', {
+  await page.goto('https://www.facebook.com/groups/744229732320159/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
