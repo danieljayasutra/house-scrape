@@ -30,6 +30,33 @@ async function downloadImage(url, path) {
   }
 }
 
+// Fungsi untuk mendownload gambar dan menyimpannya
+async function downloadImageX(url, path) {
+  const writer = fs.createWriteStream(path + '.jpg');
+
+  try {
+    const response = await axios({
+      method: 'get',
+      url: url,
+      responseType: 'stream', // Mengatur axios untuk menerima response dalam bentuk stream
+    });
+
+    // Menulis gambar ke file
+    response.data.pipe(writer);
+
+    // Menunggu hingga file selesai ditulis
+    writer.on('finish', () => {
+      console.log(`Gambar berhasil disimpan dengan nama ${path}`);
+    });
+
+    writer.on('error', (err) => {
+      console.error('Terjadi kesalahan saat menyimpan gambar:', err);
+    });
+  } catch (error) {
+    console.error('Terjadi kesalahan saat mendownload gambar:', error);
+  }
+}
+
 // Fungsi untuk memodifikasi string
 function modifyFilename(filename) {
   // Periksa apakah filename adalah string
@@ -54,5 +81,6 @@ function modifyFilename(filename) {
 }
 module.exports = {
   downloadImage,
+  downloadImageX,
   modifyFilename,
 };
