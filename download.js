@@ -2,12 +2,29 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const probe = require('probe-image-size');
+const https = require('https');
 
 // Fungsi untuk mendownload gambar dan menyimpannya
 async function downloadImage(url, path) {
-  const writer = fs.createWriteStream(path);
+  try {
+    const { width, height } = await getImageSize(url);
+    console.log(`Width: ${width}, Height: ${height}`);
+    if (width < 500) {
+      console.log('Cancel: Lebar gambar kurang dari 500px');
+      return;
+    }
+    if (height < 500) {
+      console.log('Cancel: Tinggi gambar kurang dari 500px');
+      return;
+    }
+  } catch (error) {
+    console.lof('Error probe-image:', error.message);
+    return;
+  }
 
   try {
+    const writer = fs.createWriteStream(path);
     const response = await axios({
       method: 'get',
       url: url,
@@ -28,6 +45,21 @@ async function downloadImage(url, path) {
   } catch (error) {
     console.error('Terjadi kesalahan saat mendownload gambar:', error);
   }
+}
+
+async function getImageSize(url) {
+  return new Promise((resolve, reject) => {
+    https
+      .get(url, async (res) => {
+        try {
+          const result = await probe(res);
+          resolve(result);
+        } catch (err) {
+          reject(err);
+        }
+      })
+      .on('error', reject);
+  });
 }
 
 // Fungsi untuk mendownload gambar dan menyimpannya
