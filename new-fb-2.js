@@ -21,14 +21,15 @@ async function main() {
   const page = await browser.newPage();
   await browser.setCookie(...cookies);
   // Buka halaman Facebook
-  // Jual Beli Rumah Murah kab. bandung selatan
-  // https://www.facebook.com/groups/1776631015998749/media
+
+  // JUAL BELI RUMAH DI JAKARTA
+  // https://www.facebook.com/groups/292365461202093/media
 
   // JUAL BELI RUMAH JAKARTA UTARA
   // https://www.facebook.com/groups/979076889513010/media
 
-  // JUAL BELI RUMAH DI JAKARTA
-  // https://www.facebook.com/groups/292365461202093/media
+  // Jual Beli Rumah Murah kab. bandung selatan
+  // https://www.facebook.com/groups/1776631015998749/media
 
   await page.goto('https://www.facebook.com/groups/292365461202093/media', {
     waitUntil: 'networkidle2',
@@ -52,7 +53,7 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 1) {
+    if (scrollHeight > 70000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -122,8 +123,23 @@ async function infiniteScroll(page) {
       await randomDelay(300, 1200);
 
       // Tunggu elemen dengan atribut spesifik muncul
-      const selector = 'div[aria-label="Close"][role="button"]';
-      await page.waitForSelector(selector, { timeout: 60000 });
+      let selector = 'div[aria-label="Close"][role="button"]';
+
+      let buttonShow = false;
+      try {
+        await page.waitForSelector(selector, { timeout: 2000 });
+        buttonShow = true;
+      } catch (error) {
+        console.log(`Tidak ada 'div[aria-label="Close"][role="button"]'`);
+      }
+      if (!buttonShow) {
+        try {
+          selector = 'div[aria-label="Tutup"][role="button"]';
+          await page.waitForSelector(selector, { timeout: 2000 });
+        } catch (error) {
+          console.log(`Tidak ada div[aria-label="Tutup"][role="button"]`);
+        }
+      }
 
       // Klik elemen
       await page.click(selector);

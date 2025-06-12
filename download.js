@@ -10,11 +10,11 @@ async function downloadImage(url, path) {
   try {
     const { width, height } = await getImageSize(url);
     console.log(`Width: ${width}, Height: ${height}`);
-    if (width < 500) {
+    if (width < 400) {
       console.log('Cancel: Lebar gambar kurang dari 500px');
       return;
     }
-    if (height < 500) {
+    if (height < 400) {
       console.log('Cancel: Tinggi gambar kurang dari 500px');
       return;
     }

@@ -11,7 +11,7 @@ async function main() {
   const cookies = JSON.parse(fs.readFileSync(cookiesPath, 'utf8'));
   // Luncurkan browser
   const browser = await puppeteer.launch({
-    headless: false, // set ke true jika tidak perlu melihat browser
+    headless: true, // set ke true jika tidak perlu melihat browser
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-notifications'],
     defaultViewport: {
       width: 1280, // Lebar jendela
@@ -21,16 +21,16 @@ async function main() {
   const page = await browser.newPage();
   await browser.setCookie(...cookies);
   // Buka halaman Facebook
-  // JUAL BELI RUMAH DI BANDUNG
+  // JUAL BELI RUMAH DI BANDUNG // GROUP 1
   // https://www.facebook.com/groups/744229732320159/media
 
-  // Rumah Murah surabaya
+  // Rumah Murah surabaya // GROUP 2
   // https://www.facebook.com/groups/947230525862360/media
 
-  // Info Jual Beli Rumah Tangerang
+  // Info Jual Beli Rumah Tangerang // GROUP 3
   // https://www.facebook.com/groups/620497875014026/media
 
-  await page.goto('https://www.facebook.com/groups/744229732320159/media', {
+  await page.goto('https://www.facebook.com/groups/947230525862360/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -42,6 +42,8 @@ main();
 
 async function infiniteScroll(page) {
   let lastDocLength = 0;
+  console.log('Last doc length:', lastDocLength);
+
   while (true) {
     await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
     // Ambil nilai document.body.scrollHeight
@@ -52,7 +54,8 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 1) {
+    // UPDATE INI BRO SCROLLING NYA
+    if (scrollHeight > 20000) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
@@ -122,8 +125,23 @@ async function infiniteScroll(page) {
       await randomDelay(300, 1200);
 
       // Tunggu elemen dengan atribut spesifik muncul
-      const selector = 'div[aria-label="Close"][role="button"]';
-      await page.waitForSelector(selector, { timeout: 60000 });
+      let selector = 'div[aria-label="Close"][role="button"]';
+
+      let buttonShow = false;
+      try {
+        await page.waitForSelector(selector, { timeout: 2000 });
+        buttonShow = true;
+      } catch (error) {
+        console.log(`Tidak ada 'div[aria-label="Close"][role="button"]'`);
+      }
+      if (!buttonShow) {
+        try {
+          selector = 'div[aria-label="Tutup"][role="button"]';
+          await page.waitForSelector(selector, { timeout: 2000 });
+        } catch (error) {
+          console.log(`Tidak ada div[aria-label="Tutup"][role="button"]`);
+        }
+      }
 
       // Klik elemen
       await page.click(selector);
