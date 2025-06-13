@@ -19,7 +19,7 @@ async function downloadImage(url, path) {
       return;
     }
   } catch (error) {
-    console.lof('Error probe-image:', error.message);
+    console.log('Error probe-image:', error.message);
     return;
   }
 

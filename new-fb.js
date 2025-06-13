@@ -30,7 +30,7 @@ async function main() {
   // Info Jual Beli Rumah Tangerang // GROUP 3
   // https://www.facebook.com/groups/620497875014026/media
 
-  await page.goto('https://www.facebook.com/groups/947230525862360/media', {
+  await page.goto('https://www.facebook.com/groups/620497875014026/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -55,7 +55,7 @@ async function infiniteScroll(page) {
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
     // UPDATE INI BRO SCROLLING NYA
-    if (scrollHeight > 20000) {
+    if (scrollHeight > 1) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);

@@ -31,7 +31,7 @@ async function main() {
   // Jual Beli Rumah Murah kab. bandung selatan
   // https://www.facebook.com/groups/1776631015998749/media
 
-  await page.goto('https://www.facebook.com/groups/292365461202093/media', {
+  await page.goto('https://www.facebook.com/groups/979076889513010/media', {
     waitUntil: 'networkidle2',
     timeout: 100000,
   });
@@ -53,7 +53,8 @@ async function infiniteScroll(page) {
 
     await randomDelay(1000, 1500); // Delay random antara 3-7 detik
 
-    if (scrollHeight > 70000) {
+    // UPDATE YG DISINI BRO BIAR SCROLL
+    if (scrollHeight > 1) {
       const html = await page.evaluate(() => document.body.innerHTML);
 
       const dom = new JSDOM(html);
